@@ -1,0 +1,3 @@
+# Respostas do Trabalho de PMC 2 - Classificadora de Padrões (Conservantes de Bebidas)
+
+A execução do `pmc2.py` irá evidenciar, via gráfico e contagem de tempo, a diferença fundamental da adição da constante de *Momentum* ao treinamento Backpropagation Padrão. Tipicamente, observa-se que o termo Momentum ($=0.9$) auxilia fortemente o algoritmo a ultrapassar platôs e mínimos locais, convergindo e chegando ao critério de parada na precisão em um **número consideravelmente menor de épocas**, acelerando o tempo de processamento. A função de arredondamento simétrico aplicada em Python traduz as saídas preditas reais para o critério binário (ex: se `0.85` e limiar é `0.5`, ajusta-se para `1`) determinando assim, efetivamente, o conservante `A, B` ou `C` que será aplicado.
