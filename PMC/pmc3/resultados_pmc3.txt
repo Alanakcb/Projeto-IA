@@ -1,0 +1,12 @@
+--- Rede 1 ---
+T1: 4849 épocas | EQM: 0.012586 | Erro Rel Médio: 77.94% | Variância: 42721.72%
+T2: 86 épocas | EQM: 0.050479 | Erro Rel Médio: 329.32% | Variância: 1271897.44%
+T3: 15031 épocas | EQM: 0.005768 | Erro Rel Médio: 41.03% | Variância: 6726.06%
+--- Rede 2 ---
+T1: 4788 épocas | EQM: 0.003253 | Erro Rel Médio: 47.58% | Variância: 21286.89%
+T2: 161 épocas | EQM: 0.051558 | Erro Rel Médio: 325.83% | Variância: 1243314.13%
+T3: 5019 épocas | EQM: 0.003529 | Erro Rel Médio: 48.47% | Variância: 20902.85%
+--- Rede 3 ---
+T1: 1 épocas | EQM: 0.494465 | Erro Rel Médio: 1112.51% | Variância: 11837206.39%
+T2: 1 épocas | EQM: 0.494515 | Erro Rel Médio: 1112.55% | Variância: 11838093.05%
+T3: 1 épocas | EQM: 0.494515 | Erro Rel Médio: 1112.55% | Variância: 11838093.38%

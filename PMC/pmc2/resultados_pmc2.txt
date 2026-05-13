@@ -1,0 +1,2 @@
+Treinamento Padrão: 27832 épocas, Tempo: 9.87s, Acerto: 100.0%
+Treinamento Momentum: 5616 épocas, Tempo: 1.93s, Acerto: 100.0%
