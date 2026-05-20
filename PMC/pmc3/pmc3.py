@@ -76,7 +76,7 @@ def train_tdnn(p, N1, seed):
     output_size = 1
     learning_rate = 0.1
     momentum = 0.8
-    precision = 0.5e-6
+    precision = 1e-6
     
     # Preparar dados de treino
     X_train = []

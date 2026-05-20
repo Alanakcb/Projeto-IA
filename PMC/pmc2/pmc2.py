@@ -247,13 +247,16 @@ def train_network(use_momentum=False):
     correct = np.sum(np.all(y_pred == y_test, axis=1))
     accuracy = correct / len(y_test) * 100
     
-    return epoch, mse, exec_time, mse_history, accuracy
+    # Variância do erro no teste
+    var_error = np.var(y_test - A2)
+    
+    return epoch, mse, exec_time, mse_history, accuracy, var_error
 
-ep_std, mse_std, time_std, hist_std, acc_std = train_network(False)
-ep_mom, mse_mom, time_mom, hist_mom, acc_mom = train_network(True)
+ep_std, mse_std, time_std, hist_std, acc_std, var_std = train_network(False)
+ep_mom, mse_mom, time_mom, hist_mom, acc_mom, var_mom = train_network(True)
 
-print(f"Treinamento Padrão: {ep_std} épocas, Tempo: {time_std:.2f}s, Acerto: {acc_std}%")
-print(f"Treinamento Momentum: {ep_mom} épocas, Tempo: {time_mom:.2f}s, Acerto: {acc_mom}%")
+print(f"Treinamento Padrão: {ep_std} épocas, Tempo: {time_std:.2f}s, Acerto: {acc_std}%, Variância: {var_std:.6f}")
+print(f"Treinamento Momentum: {ep_mom} épocas, Tempo: {time_mom:.2f}s, Acerto: {acc_mom}%, Variância: {var_mom:.6f}")
 
 plt.figure(figsize=(10, 5))
 plt.plot(hist_std, label='Padrão')
@@ -266,5 +269,5 @@ plt.grid(True)
 plt.savefig('grafico_eqm_pmc2.png')
 
 with open('resultados_pmc2.txt', 'w', encoding='utf-8') as f:
-    f.write(f"Treinamento Padrão: {ep_std} épocas, Tempo: {time_std:.2f}s, Acerto: {acc_std}%\n")
-    f.write(f"Treinamento Momentum: {ep_mom} épocas, Tempo: {time_mom:.2f}s, Acerto: {acc_mom}%\n")
+    f.write(f"Treinamento Padrão: {ep_std} épocas, Tempo: {time_std:.2f}s, Acerto: {acc_std}%, Variância: {var_std:.6f}\n")
+    f.write(f"Treinamento Momentum: {ep_mom} épocas, Tempo: {time_mom:.2f}s, Acerto: {acc_mom}%, Variância: {var_mom:.6f}\n")
