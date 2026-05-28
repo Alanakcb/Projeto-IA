@@ -69,15 +69,14 @@ d_train = train_data[:, 2]
 X_test = test_data[:, 0:2]
 d_test = test_data[:, 2]
 
-# 1. K-means nos padrões com presença de radiação (d == 1)
-X_rad = X_train[d_train == 1]
-kmeans = KMeans(n_clusters=2, random_state=42, n_init=10).fit(X_rad)
+# 1. K-means em todo o conjunto de treinamento
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10).fit(X_train)
 centers = kmeans.cluster_centers_
 labels = kmeans.labels_
 
 var = []
 for i in range(2):
-    cluster_points = X_rad[labels == i]
+    cluster_points = X_train[labels == i]
     variance = np.mean(np.sum((cluster_points - centers[i])**2, axis=1))
     var.append(variance)
 
