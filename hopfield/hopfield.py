@@ -117,10 +117,10 @@ def create_patterns() -> np.ndarray:
     +1 = pixel escuro (foreground)
     """
     
-    # Padrão 1: Número "1" (desespelhado)
+    # Padrão 1: Número "1" (corrigido)
     pattern1 = np.array([
         -1, -1, +1, -1, -1,  # linha 1
-        -1, -1, +1, +1, -1,  # linha 2
+        -1, +1, +1, -1, -1,  # linha 2 (corrigido)
         -1, -1, +1, -1, -1,  # linha 3
         -1, -1, +1, -1, -1,  # linha 4
         -1, -1, +1, -1, -1,  # linha 5
@@ -130,15 +130,15 @@ def create_patterns() -> np.ndarray:
         -1, +1, +1, +1, -1,  # linha 9
     ], dtype=np.float32)
     
-    # Padrão 2: Número "2" (desespelhado)
+    # Padrão 2: Número "2" (corrigido)
     pattern2 = np.array([
         -1, +1, +1, +1, -1,  # linha 1
         +1, +1, -1, +1, +1,  # linha 2
-        +1, +1, -1, -1, -1,  # linha 3
-        -1, +1, +1, -1, -1,  # linha 4
-        -1, -1, +1, +1, -1,  # linha 5
-        -1, -1, -1, +1, +1,  # linha 6
-        -1, -1, -1, -1, +1,  # linha 7
+        -1, -1, -1, +1, +1,  # linha 3 (corrigido)
+        -1, -1, +1, +1, -1,  # linha 4 (corrigido)
+        -1, +1, +1, -1, -1,  # linha 5 (corrigido)
+        +1, +1, -1, -1, -1,  # linha 6 (corrigido)
+        +1, -1, -1, -1, -1,  # linha 7 (corrigido)
         +1, +1, +1, +1, +1,  # linha 8
         +1, +1, +1, +1, +1,  # linha 9
     ], dtype=np.float32)
@@ -204,7 +204,6 @@ def visualize_pattern(pattern: np.ndarray, title: str = "Padrão", ax=None) -> N
     ax.set_xlim(-0.1, 5.1)
     ax.set_ylim(-0.1, 9.1)
     ax.set_aspect('equal')
-    ax.invert_yaxis()
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_title(title, fontsize=10, fontweight='bold')
@@ -226,8 +225,8 @@ def run_simulations():
     network.train(patterns)
     
     # Prepara figuras para visualização
-    num_simulations = 12
-    simulations_per_pattern = 3
+    num_simulations = 4
+    simulations_per_pattern = 1
     
     results = []
     
@@ -235,7 +234,7 @@ def run_simulations():
     print("REDE DE HOPFIELD PARA RECUPERAÇÃO DE PADRÕES")
     print("=" * 80)
     print(f"\nTreinamento concluído com {len(patterns)} padrões de 45 neurônios")
-    print("\nSimulando 12 transmissões (3 para cada padrão)...\n")
+    print("\nSimulando 4 transmissões (1 para cada padrão)...\n")
     
     pattern_names = ["1", "2", "3", "4"]
     
@@ -247,7 +246,7 @@ def run_simulations():
         original_pattern = patterns[pattern_idx]
         
         for sim in range(simulations_per_pattern):
-            print(f"\nSimulação {pattern_idx * 3 + sim + 1}/12 - Padrão '{pattern_name}' (teste {sim + 1})")
+            print(f"\nSimulação {pattern_idx + sim + 1}/4 - Padrão '{pattern_name}' (teste {sim + 1})")
             print("-" * 80)
             
             # Adiciona ruído (20%)
@@ -290,23 +289,23 @@ def save_visualizations(results: List, patterns: np.ndarray):
     os.makedirs('resultados', exist_ok=True)
     
     # Padrão 1: Todos os resultados em uma figura grande
-    fig = plt.figure(figsize=(18, 16))
+    fig = plt.figure(figsize=(10, 12))
     fig.suptitle('Rede de Hopfield: Recuperação de Padrões com Ruído (20%)', 
-                 fontsize=16, fontweight='bold', y=0.995)
+                 fontsize=14, fontweight='bold', y=0.995)
     
     for idx, result in enumerate(results):
         # Original
-        ax = plt.subplot(12, 3, idx*3 + 1)
+        ax = plt.subplot(4, 3, idx*3 + 1)
         visualize_pattern(result['original'], 
                          f"Padrão Original\n'{result['pattern_name']}'", ax=ax)
         
         # Com ruído
-        ax = plt.subplot(12, 3, idx*3 + 2)
+        ax = plt.subplot(4, 3, idx*3 + 2)
         visualize_pattern(result['noisy'], 
                          f"Com Ruído (20%)\n{result['num_corrupted']} pixels corrompidos", ax=ax)
         
         # Recuperado
-        ax = plt.subplot(12, 3, idx*3 + 3)
+        ax = plt.subplot(4, 3, idx*3 + 3)
         status = "✓ OK" if result['num_errors'] == 0 else f"✗ {result['num_errors']} erros"
         visualize_pattern(result['recovered'], 
                          f"Recuperado\n{status}", ax=ax)
@@ -318,23 +317,22 @@ def save_visualizations(results: List, patterns: np.ndarray):
     # Padrão 2: Uma figura por padrão
     pattern_names = ["1", "2", "3", "4"]
     for p_idx in range(4):
-        fig, axes = plt.subplots(3, 3, figsize=(12, 12))
-        fig.suptitle(f"Padrão '{pattern_names[p_idx]}': 3 Simulações com 20% de Ruído", 
-                    fontsize=14, fontweight='bold')
+        fig, axes = plt.subplots(1, 3, figsize=(10, 4))
+        fig.suptitle(f"Padrão '{pattern_names[p_idx]}': Recuperação com 20% de Ruído", 
+                    fontsize=12, fontweight='bold')
         
-        for sim_idx in range(3):
-            result = results[p_idx * 3 + sim_idx]
-            
-            # Original
-            visualize_pattern(result['original'], f"Original", axes[sim_idx, 0])
-            # Com ruído
-            visualize_pattern(result['noisy'], 
-                             f"Ruído: {result['num_corrupted']} pixels", 
-                             axes[sim_idx, 1])
-            # Recuperado
-            status = "✓ OK" if result['num_errors'] == 0 else f"✗ {result['num_errors']} erros"
-            visualize_pattern(result['recovered'], f"Recuperado\n{status}", 
-                             axes[sim_idx, 2])
+        result = results[p_idx]
+        
+        # Original
+        visualize_pattern(result['original'], f"Original", axes[0])
+        # Com ruído
+        visualize_pattern(result['noisy'], 
+                         f"Ruído: {result['num_corrupted']} pixels", 
+                         axes[1])
+        # Recuperado
+        status = "✓ OK" if result['num_errors'] == 0 else f"✗ {result['num_errors']} erros"
+        visualize_pattern(result['recovered'], f"Recuperado\n{status}", 
+                         axes[2])
         
         plt.tight_layout()
         plt.savefig(f'resultados/hopfield_padrao_{pattern_names[p_idx]}.png', 
